@@ -9,6 +9,14 @@
       };
       options = $.extend(defaults, options);
 
+      function percentageDistance() {
+        var distance = -1 * parseInt(options.menuWidth + 10);
+        if (typeof(options.menuWidth) == 'string' && options.menuWidth.endsWith('%')) {
+          distance = distance + '%';
+        }
+        return distance;
+      }
+
       $(this).each(function(){
         var $this = $(this);
         var menu_id = $("#"+ $this.attr('data-activates'));
@@ -23,12 +31,13 @@
         $('body').append(dragTarget);
 
         if (options.edge == 'left') {
-          menu_id.css('left', -1 * (options.menuWidth + 10));
+          options.menuWidth.match('')
+          menu_id.css('left', percentageDistance());
           dragTarget.css({'left': 0}); // Add Touch Area
         }
         else {
           menu_id.addClass('right-aligned') // Change text-alignment to right
-            .css('right', -1 * (options.menuWidth + 10))
+            .css('right', percentageDistance())
             .css('left', '');
           dragTarget.css({'right': 0}); // Add Touch Area
         }
@@ -55,9 +64,9 @@
             }
             else if (menuOut === false){
               if (options.edge === 'left')
-                menu_id.css('left', -1 * (options.menuWidth + 10));
+                menu_id.css('left', percentageDistance());
               else
-                menu_id.css('right', -1 * (options.menuWidth + 10));
+                menu_id.css('right', percentageDistance());
             }
 
           });
@@ -85,7 +94,7 @@
             // Reset phantom div
             dragTarget.css({width: '', right: '', left: '0'});
             menu_id.velocity(
-              {left: -1 * (options.menuWidth + 10)},
+              {left: percentageDistance()},
               { duration: 200,
                 queue: false,
                 easing: 'easeOutCubic',
@@ -103,7 +112,7 @@
             // Reset phantom div
             dragTarget.css({width: '', right: '0', left: ''});
             menu_id.velocity(
-              {right: -1 * (options.menuWidth + 10)},
+              {right: percentageDistance()},
               { duration: 200,
                 queue: false,
                 easing: 'easeOutCubic',
@@ -255,7 +264,7 @@
               $('body').css('overflow', 'hidden');
               // Push current drag target on top of DOM tree
               $('body').append(dragTarget);
-              
+
               if (options.edge === 'left') {
                 dragTarget.css({width: '50%', right: 0, left: ''});
                 menu_id.velocity({left: 0}, {duration: 300, queue: false, easing: 'easeOutQuad'});
